@@ -19,9 +19,6 @@ for line in scorefile:
         composers = re.sub("\(.*\)", "", composers)
         composers = re.sub("[&/]", ";", composers)
         composers = map(lambda s: s.strip(), composers.split(";"))
-
-        #Kramář Krommer František 1
-        
         for c in composers:
             if c != "":
                 composer_stats[c] += 1
