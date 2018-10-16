@@ -27,6 +27,11 @@ class Print:
         self.print_id = print_id
         self.partiture = partiture
 
+    def __eq__(self, other):
+        return self.edition == other.edition and\
+               self.partiture == other.partiture and\
+               self.print_id == other.print_id
+
     def _format_person(self, person):
         ret = Utilities.make_empty_if_none(person.name)
         if (person.born or person.died):
@@ -80,6 +85,12 @@ class Edition:
         self.authors = authors
         self.name = name
 
+    def __eq__(self, other):
+        return self.composition == other.composition and\
+               self.name == other.name
+            
+
+
 class Composition:
     def __init__(self, name, incipit, key, genre, year, voices, authors):
         self.name = name
@@ -90,16 +101,29 @@ class Composition:
         self.voices = voices
         self.authors = authors
 
+    def __eq__(self, other):
+        return self.name == other.name and\
+               self.incipit == other.incipit and\
+               self.key == other.key and\
+               self.genre == other.genre and\
+               self.year == other.year
+
 class Voice:
     def __init__(self, name, range):
         self.name = name
         self.range = range
+    def __eq__(self, other):
+        return self.name == self.range and\
+               self.range == self.range
 
 class Person:
     def __init__(self, name, born, died):
         self.name = name
         self.born = born
         self.died = died
+
+    def __eq__(self, other):
+        return self.name == other.name
     
 class RawPrint:
     pass
