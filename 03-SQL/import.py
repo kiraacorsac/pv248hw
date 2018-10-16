@@ -10,15 +10,9 @@ def unique(list):
             unique_list.append(e)
     return unique_list
 
-if __debug__:
-    print("debug")
-    scorelib_path = "scorelib.txt"
-    database_path = "scorelib.db"
-    schema_path = "./03-SQL/scorelib.sql"
-else:
-    scorelib_path = sys.argv[1]
-    database_path = sys.argv[2]
-    schema_path = "scorelib.sql"
+scorelib_path = sys.argv[1]
+database_path = sys.argv[2]
+schema_path = "scorelib.sql"
 
 data = scorelib.load(scorelib_path)
 conn = {}
