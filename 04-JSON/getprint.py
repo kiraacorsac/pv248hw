@@ -22,7 +22,7 @@ class ObjectEncoder(json.JSONEncoder):
             return self.default(d)
         return obj
 
-conn = sqlite3.connect("scorelib.db") #TODO: change before commit
+conn = sqlite3.connect("scorelib.dat") #TODO: change before commit
 curs = conn.cursor()
 auths = curs.execute("""select person.name, born, died
 from person
