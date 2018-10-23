@@ -21,7 +21,7 @@ database = Path(database_path)
 if (database.exists()):
     database.unlink()
     
-conn = sqlite3.connect(database)
+conn = sqlite3.connect(str(database))
 with open(schema_path, "r") as schema:
     conn.executescript(schema.read())
 
@@ -42,11 +42,12 @@ for score in data:
         persons_died_dict[person.name] = persons_died_dict.get(person.name) or person.died
 
 for name in persons_born_dict:
-    insert_cursor.execute(
-        "insert into person (name, born, died) values (?,?,?)",
-        (name, persons_born_dict[name], persons_died_dict[name])
-    )
-    author_id_dict[name] = insert_cursor.lastrowid
+    if name != "":
+        insert_cursor.execute(
+            "insert into person (name, born, died) values (?,?,?)",
+            (name, persons_born_dict[name], persons_died_dict[name])
+        )
+        author_id_dict[name] = insert_cursor.lastrowid
 
 
 for comp in unique(map(lambda d: d.composition(), data)):
@@ -60,11 +61,12 @@ for comp in unique(map(lambda d: d.composition(), data)):
     composition_id_dict[comp_info] = score_id
 
     for author in comp.authors:
-        author_id = author_id_dict[author.name]
-        insert_cursor.execute(
-            "insert into score_author (score, composer) values (?, ?)",
-            (score_id, author_id)
-        )
+        if author.name != "":
+            author_id = author_id_dict[author.name]
+            insert_cursor.execute(
+                "insert into score_author (score, composer) values (?, ?)",
+                (score_id, author_id)
+            )
 
 
     for (num, voice) in enumerate(comp.voices):
@@ -86,11 +88,12 @@ for edition in unique(map(lambda d: d.edition, data)):
     edition_id_dict[edition_info] = edition_id
 
     for editor in edition.authors:
-        editor_id = author_id_dict[editor.name]
-        insert_cursor.execute(
-            "insert into edition_author (edition, editor) values (?, ?)",
-            (edition_id, editor_id)
-        )
+        if editor.name != "":
+            editor_id = author_id_dict[editor.name]
+            insert_cursor.execute(
+                "insert into edition_author (edition, editor) values (?, ?)",
+                (edition_id, editor_id)
+            )
 
 for print in data:
     edition = print.edition
