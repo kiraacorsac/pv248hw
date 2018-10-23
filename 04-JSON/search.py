@@ -11,7 +11,6 @@ class ObjectEncoder(json.JSONEncoder):
                 (key, value)
                 for key, value in inspect.getmembers(obj)
                 if not key.startswith("__")
-                and not inspect.isbuiltin(value)
             )
             return self.default(d)
         return obj
