@@ -135,6 +135,7 @@ class Loader:
     def _load_editors(self, editors):
         re.sub("continuo by", "", editors)
         re.sub("continuo:", "", editors)
+        re.sub("\(.*?\)", "", editors)
         if (re.fullmatch(".*;.*", editors) is not None):
             names = map(lambda s: s.strip(), editors.split(";"))
         else:
