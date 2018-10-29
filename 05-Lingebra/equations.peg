@@ -1,0 +1,8 @@
+grammar Equation
+
+equation <- terms:term+ "=" solution:whole
+term <- coefficient:whole unknown:neznama
+whole <- mark:mark? num:integer?
+mark <- [+-]
+neznama <- [a-z]
+integer <- [0-9]+
