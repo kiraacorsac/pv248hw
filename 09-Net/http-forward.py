@@ -20,9 +20,9 @@ def is_json(myjson):
 
 class ForwardingHandler(http.server.BaseHTTPRequestHandler):
         
-    def do_common(self):
+    def do_common(self,time=1):
         try:
-            response = reqs.urlopen(self.request, timeout=1)
+            response = reqs.urlopen(self.request, timeout)
             resp_data = response.read()
             resp_type, resp_data = ("json", json.loads(resp_data)) if is_json(resp_data) else ("content", resp_data.decode("utf-8"))
             
@@ -53,7 +53,6 @@ class ForwardingHandler(http.server.BaseHTTPRequestHandler):
         try:
             self.do_common()
         except Exception as e:
-            print(e)
             self.ret_obj = {"code": "timeout"}
         
         self.send_response(200)
@@ -69,12 +68,12 @@ class ForwardingHandler(http.server.BaseHTTPRequestHandler):
             if "url" not in in_json:
                 self.ret_obj = {"code": "invalid json"}
             else:
-                request = reqs.Request(in_json.url,
-                    data=in_json.content,
-                    headers=in_json.headers,
-                    method=in_json.type if "type" in requin_json else "GET")
+                request = reqs.Request(in_json.url if "url" in in_json else target,
+                    data=bytes(in_json.content if "content" in in_json else "", "UTF-8"),
+                    headers=in_json.headers if "headers" in in_json else {},
+                    method=in_json.type if "type" in in_json else "GET")
                 try:
-                    self.do_common()
+                    self.do_common(in_json.timeout if "timeout" in in_json else 1)
                 except:
                     self.ret_obj = {"code": "timeout"}
         self.send_response(200)
