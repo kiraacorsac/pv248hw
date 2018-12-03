@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import http.server
 from http.server import HTTPServer, CGIHTTPRequestHandler
 from socketserver import ThreadingMixIn
