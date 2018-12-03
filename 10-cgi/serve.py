@@ -16,15 +16,24 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 class CGIHandler(CGIHTTPRequestHandler):
     cgi_directories = ['/']
 
+    #.is_cgi - "is" method with side effects <3 
+    #but I just follow the basic implementation in CGIHTTPRequestHandler
+    def is_cgi(self):
+        file = urllib.parse.urlparse(self.path).path
+        if file[-4:].lower() == ".cgi":
+            self.cgi_info = os.curdir, file
+            return True
+        return False
+
     def do_common(self):
         file = urllib.parse.urlparse(self.path).path
         if os.path.isfile(file[1:]):
-            if file[-4:].lower() == ".cgi":  #.is_cgi - "is" method with side effects <3
-                self.cgi_info = os.curdir, file
+            if is_cgi():
                 self.run_cgi()
             else:
                 f = open(file[1:], 'br')
                 self.send_response(200)
+                self.send_header('Content-Length', str(os.stat(f).st_size))
                 self.end_headers()
                 self.wfile.write(f.read())
                 f.close()
@@ -35,6 +44,9 @@ class CGIHandler(CGIHTTPRequestHandler):
         self.do_common()
     
     def do_POST(self):
+        self.do_common()
+
+    def do_HEAD(self):
         self.do_common()
     
 
