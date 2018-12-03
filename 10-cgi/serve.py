@@ -26,14 +26,14 @@ class CGIHandler(CGIHTTPRequestHandler):
         return False
 
     def do_common(self):
-        file = urllib.parse.urlparse(self.path).path
-        if os.path.isfile(file[1:]):
-            if is_cgi():
+        file = urllib.parse.urlparse(self.path).path[1:]
+        if os.path.isfile(file):
+            if self.is_cgi():
                 self.run_cgi()
             else:
-                f = open(file[1:], 'br')
+                f = open(file, 'br')
                 self.send_response(200)
-                self.send_header('Content-Length', str(os.stat(f).st_size))
+                self.send_header('Content-Length', str(os.stat(file).st_size))
                 self.end_headers()
                 self.wfile.write(f.read())
                 f.close()
