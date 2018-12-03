@@ -4,8 +4,8 @@ import numpy
 import pandas
 import json
 
- file = sys.argv[1]
- mode = sys.argv[2]
+file = sys.argv[1]
+mode = sys.argv[2]
 
 #file = "08-Stat/points.csv" ##### TODO
 #mode = "exercises"
