@@ -13,15 +13,14 @@ target = sys.argv[2]
 def is_json(myjson):
   try:
     json_object = json.loads(myjson)
-    return "type" in json_object and "url" in json_object and \
-            not(json_body.type == "POST" and "content" not in json_body)
+    return "url" in json_object and not(json_object.type == "POST" and "content" not in json_object)
 
-  except:
+  except ValueError:
     return False  
 
 class ForwardingHandler(http.server.BaseHTTPRequestHandler):
 
-    def do_common(self,time):
+    def do_common(self,timeout):
         try:
             response = reqs.urlopen(self.request, timeout)
             resp_data = response.read().decode("utf-8")
@@ -35,8 +34,8 @@ class ForwardingHandler(http.server.BaseHTTPRequestHandler):
             response.close()
 
         except urllib.error.HTTPError as e:
-            resp_data = e.read()
-            resp_type, resp_data = ("json", json.loads(resp_data)) if is_json(resp_data) else ("content", resp_data.decode("utf-8"))
+            resp_data = e.read().decode("utf-8")
+            resp_type, resp_data = ("json", json.loads(resp_data)) if is_json(resp_data) else ("content", resp_data)
             self.ret_obj =  {
                 "code": e.code,
                 "headers": dict(e.headers._headers),
@@ -77,7 +76,7 @@ class ForwardingHandler(http.server.BaseHTTPRequestHandler):
             self.request = reqs.Request(in_json.url,
                 data=bytes(in_json.content if "content" in in_json else "", "UTF-8"),
                 headers=in_json.headers if "headers" in in_json else {},
-                method=in_json.type)
+                method=in_json.type if "type" in in_json else "GET")
             try:
                 self.do_common(in_json.timeout if "timeout" in in_json else 1)
             except:
