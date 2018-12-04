@@ -18,10 +18,10 @@ class CGIHandler(CGIHTTPRequestHandler):
 
     #.is_cgi - "is" method with side effects <3 
     #but I just follow the basic implementation in CGIHTTPRequestHandler
+    #sooo don't judge me ._.
     def is_cgi(self):
-        file = urllib.parse.urlparse(self.path).path
-        if file[-4:].lower() == ".cgi":
-            self.cgi_info = os.curdir, file
+        if urllib.parse.urlparse(self.path).path[-4:].lower() == ".cgi":
+            self.cgi_info = os.curdir, self.path[1:]
             return True
         return False
 
@@ -50,14 +50,10 @@ class CGIHandler(CGIHTTPRequestHandler):
         self.do_common()
     
 
-port = 9001
-# port = int(sys.argv[1])
-dir = "" 
-# dir = sys.argv[2]
+port = int(sys.argv[1])
+dir = sys.argv[2]
 
-
-dir = os.path.join(os.path.dirname(__file__), dir)
-os.chdir(dir)
+os.chdir(os.path.abspath(dir))
 
 server = ThreadedHTTPServer(("", port), CGIHandler)
 server.serve_forever()

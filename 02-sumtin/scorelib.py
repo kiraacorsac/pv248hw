@@ -1,3 +1,5 @@
+##todo check parenthesis, composition years
+
 import os
 import re
 
@@ -54,7 +56,7 @@ class Print:
             
     def format(self):
         for line in self._get_format_lines():
-            print(line)
+            print(line , file=open('output-me.txt', 'a',  encoding='utf8')) #
 
     def _get_format_lines(self):
         yield("Print Number: " + str(self.print_id))
@@ -137,11 +139,11 @@ class Loader:
         composition_incipit = Utilities.make_nonempty_or_none(raw_print.Incipit)
         composition_key = Utilities.make_nonempty_or_none(raw_print.Key)
         composition_genre = Utilities.make_nonempty_or_none(raw_print.Genre)
-        year = re.fullmatch("[0-9]{4}", raw_print.CompositionYear.strip())
-        if year is None:
+        year = re.findall("[0-9]{4}", raw_print.CompositionYear.strip())
+        if year == []:
             composition_year = None
         else:
-            composition_year = int(year.group())
+            composition_year = int(year[0])
 
         voices = []
         for key, value in raw_print.__dict__.items():
