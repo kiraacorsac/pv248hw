@@ -5,8 +5,9 @@ Aspon jedno menu bude scrapovane z obrazku pomocou OCR kniznic (Tessaract?).
 Aspon jedno menu bude scrapovane zo strukturovaneho HTML.
 Scrapovane budu aspon 3 rozne zdroje (napr.: zomato.com, skanzeen.cz, namaskar.cz, nepalska-restaurace-makalu.cz).
 
-Nasledne ho bude servovat cez GET request ako JSON. V pripade problemu pri scrapovani, za danu restauraciu bude menu nastavene na `null`.
-Bude moznost zobrazit dnesne a zajtrajsie menu vsetkych restauracii v databaze (requesty '/today', '/tommorow') a filtrovania pomocou tagov (tags=india;china). Odpoved bude JSON zoznam struktury ako napr.
+Nasledne ho bude servovat cez GET request. V pripade problemu pri scrapovani, za danu restauraciu bude menu nastavene na `null`.
+Bude moznost zobrazit dnesne a zajtrajsie menu vsetkych restauracii v databaze (requesty '/today', '/tommorow').
+Odpoved bude JSON zoznam struktury ako napr.
 
 ```
 [
