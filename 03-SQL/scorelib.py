@@ -115,6 +115,8 @@ class Voice:
     def __eq__(self, other):
         return self.name == self.range and\
                self.range == self.range
+    def __hash__(self):
+        return hash((self.name, self.range))
 
 class Person:
     def __init__(self, name, born, died):
@@ -124,6 +126,9 @@ class Person:
 
     def __eq__(self, other):
         return self.name == other.name
+    
+    def __hash__(self):
+        return hash(self.name)
     
 class RawPrint:
     pass

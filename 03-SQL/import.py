@@ -10,9 +10,11 @@ def unique(list):
             unique_list.append(e)
     return unique_list
 
-scorelib_path = sys.argv[1]
-database_path = sys.argv[2]
-schema_path = "scorelib.sql"
+# scorelib_path = sys.argv[1]
+scorelib_path = "./scorelib.txt"
+# database_path = sys.argv[2]
+database_path = "./03-SQL/scorelib.db"
+schema_path = "./03-SQL/scorelib.sql"
 
 data = scorelib.load(scorelib_path)
 conn = {}
@@ -20,6 +22,7 @@ conn = {}
 database = Path(database_path)
 if (database.exists()):
     database.unlink()
+    
     
 conn = sqlite3.connect(str(database))
 with open(schema_path, "r") as schema:
@@ -50,11 +53,11 @@ for name in persons_born_dict:
         author_id_dict[name] = insert_cursor.lastrowid
 
 
-for comp in unique(map(lambda d: d.composition(), data)):
-    comp_info = (comp.name, comp.genre, comp.key, comp.incipit, comp.year)
+for comp in map(lambda d: d[0],unique(map(lambda d: (d.composition(), d.composition().voices), data))):
+    comp_info = (comp.name, comp.genre, comp.key, comp.incipit, comp.year, tuple(comp.voices))
     insert_cursor.execute(
         "insert into score (name, genre, key, incipit, year) values (?,?,?,?,?)",
-        comp_info
+        comp_info[:-1]
     )
     
     score_id = insert_cursor.lastrowid
@@ -75,14 +78,15 @@ for comp in unique(map(lambda d: d.composition(), data)):
             (num + 1, score_id, voice.range, voice.name)
         )
 
-for edition in unique(map(lambda d: d.edition, data)):
+for edition in unique(map(lambda d: (d.edition, (d.edition.authors, d.edition.composition, d.edition.composition.voices)), data)):
+    edition = edition[0]
     comp = edition.composition
-    comp_info = (comp.name, comp.genre, comp.key, comp.incipit, comp.year)
-    edition_info = (composition_id_dict[comp_info], edition.name, None)
+    comp_info = (comp.name, comp.genre, comp.key, comp.incipit, comp.year, tuple(comp.voices))
+    edition_info = (composition_id_dict[comp_info], edition.name, None, tuple(edition.authors))
 
     insert_cursor.execute(
         "insert into edition (score, name, year) values (?, ? ,?)",
-        edition_info
+        edition_info[:-1]
     )
     edition_id = insert_cursor.lastrowid
     edition_id_dict[edition_info] = edition_id
@@ -98,8 +102,8 @@ for edition in unique(map(lambda d: d.edition, data)):
 for print in data:
     edition = print.edition
     comp = edition.composition
-    comp_info = (comp.name, comp.genre, comp.key, comp.incipit, comp.year)
-    edition_info = (composition_id_dict[comp_info], edition.name, None)
+    comp_info = (comp.name, comp.genre, comp.key, comp.incipit, comp.year, tuple(comp.voices))
+    edition_info = (composition_id_dict[comp_info], edition.name, None, tuple(edition.authors))
 
     insert_cursor.execute(
         "insert into print (id, partiture, edition) values (?, ?, ?)",
