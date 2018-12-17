@@ -1,0 +1,50 @@
+Agregator restauracnych menu:
+
+Program sa napoji na niekolko roznych stranok restauracii, pripadne uz existujucich restauracnych agregatorov, a scrapne denne menu. 
+Aspon jedno menu bude scrapovane z obrazku pomocou OCR kniznic (Tessaract?).
+Aspon jedno menu bude scrapovane zo strukturovaneho HTML.
+Scrapovane budu aspon 4 rozne zdroje (napr.: zomato.com, skanzeen.cz, namaskar.cz, nepalska-restaurace-makalu.cz).
+
+Nasledne ho bude servovat cez GET request. V pripade problemu pri scrapovani, za danu restauraciu bude menu nastavene na `null`.
+Bude moznost zobrazit dnesne a zajtrajsie menu vsetkych restauracii v databaze (requesty '/today', '/tommorow').
+Odpoved bude JSON zoznam struktury ako napr.
+
+```
+[
+{
+  'Restaurant': 'Skanzeen',
+  'Menu': [
+    {
+      'Name': 'Veprova plec na houbach z ryzi',
+      'Price': 99
+    },
+    {
+      'Name': 'Kureci platek v syrovem cesticku s varenymi bramborami',
+      'Price': 109
+    }
+  ]
+},
+{
+  'Restaurant': 'Everest',
+  'Menu': [
+    {
+      'Name': 'Chicken Madras (Kuřecí kostky s mírně ostrou čennajskou omáčkou)',
+      'Price': 95
+    },
+    {
+      'Name': 'Chicken Curry (Kuřecí kostky v v tradiční kari omáčce)', 
+      'Price': 95
+    },
+    {
+      'Name': 'Vegetable Thali(palak/Paneer)',
+      'Price': 95
+    }
+  ]
+}
+{
+  'Restaurant': 'Namaskar',
+  'Menu': null
+}
+]
+``` 
+Architektura programu bude umoznovat jednoduche pridavanie a odoberanie restauracii (kazda resturacia bude samostatna trieda, triedy implementuju iste spolocne rozhranie)
