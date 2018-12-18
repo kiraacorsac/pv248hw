@@ -4,14 +4,12 @@ import json
 import time
 
 
-host = "localhost"
-port = 9001
-
 def get_display(number):
     return "x" if number == 1 else "o" if number == 2 else "_"
 
-# host = sys.argv[1]
-# port = int(sys.argv[2])
+host = sys.argv[1]
+port = int(sys.argv[2])
+
 def GETRequest(ttt, command, variables):
     variables = list(map(lambda var: var + "=" + str(variables[var]), variables))
     variables = "&".join(variables)

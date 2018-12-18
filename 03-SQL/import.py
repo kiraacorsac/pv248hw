@@ -10,11 +10,11 @@ def unique(list):
             unique_list.append(e)
     return unique_list
 
-# scorelib_path = sys.argv[1]
-scorelib_path = "./scorelib.txt"
-# database_path = sys.argv[2]
-database_path = "./03-SQL/scorelib.db"
-schema_path = "./03-SQL/scorelib.sql"
+scorelib_path = sys.argv[1]
+# scorelib_path = "./scorelib.txt"
+database_path = sys.argv[2]
+# database_path = "./03-SQL/scorelib.db"
+schema_path = "./scorelib.sql"
 
 data = scorelib.load(scorelib_path)
 conn = {}
