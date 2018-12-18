@@ -116,13 +116,13 @@ class TTTHandler(BaseHTTPRequestHandler):
                             "status": "bad",
                             "message": u"coordinates incorrect or missing (∩︵∩)"
                         }
-                    elif not game.game_board[int(query["x"])][int(query["y"])] == 0:
+                    elif not game.game_board[int(query["y"])][int(query["x"])] == 0:
                         response = {
                             "status": "bad",
                             "message": u"coordinates taken (◕︿◕✿)"
                         }
                     else:
-                        game.update(int(query["x"]), int(query["y"]))
+                        game.update(int(query["y"]), int(query["x"]))
                         response = {
                             "status": "ok"
                         }
