@@ -30,7 +30,7 @@ def prompt_coordinates(board, player):
     while(True):
         x, y = input("your turn (" + get_display(player) + ")").split(" ")
         check_coor = lambda coor: coor.isnumeric() and int(coor) >= 0 and int(coor) < 3
-        if check_coor(x) and check_coor(y) and board[int(x)][int(y)] == 0:
+        if check_coor(x) and check_coor(y) and board[int(y)][int(x)] == 0:
             return int(x), int(y)
         print("invalid input")
 
